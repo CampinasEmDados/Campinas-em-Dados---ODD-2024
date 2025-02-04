@@ -1,0 +1,30 @@
+## Pergunta inicializadora: Como evoluiu a quantidade de crianças atendidas pelas creches públicas nos últimos 4 anos? Qual a proporção do total?
+
+SELECT
+  SUM(esc.quantidade_matricula_infantil_creche) AS total_matriculas_creche,
+  SUM(esc.quantidade_docente_infantil_creche) AS total_quantidade_docentes_creche,
+  SUM(pop.populacao_residente) AS total_populacao_residente,
+  esc.ano
+FROM (
+  SELECT
+    ano,
+    quantidade_matricula_infantil_creche,
+    quantidade_docente_infantil_creche,
+    id_municipio,
+    rede
+  FROM
+    `basedosdados.br_inep_censo_escolar.escola`
+  WHERE
+    ano BETWEEN 2020 AND 2023
+    AND id_municipio = '3509502'
+    AND rede = '3'
+) AS esc
+LEFT JOIN
+  `basedosdados.br_ibge_censo_2022.populacao_residente_municipio` AS pop
+ON
+  pop.id_municipio = esc.id_municipio
+WHERE
+  pop.idade = '0 a 4 anos'
+GROUP BY
+  esc.ano,
+  pop.idade;
