@@ -1,0 +1,14 @@
+# Pergunta inicializadora: Como evoluiu o número de médicos da família presentes na atenção básica do município?
+
+SELECT pf.id_registro_conselho, pf.ano, pf.mes, pf.cbo_2002, pf.indicador_atende_sus, pf.carga_horaria_ambulatorial, est.geometria
+FROM `basedosdados.br_ms_cnes.profissional` as pf
+inner join basedosdados.br_geobr_mapas.estabelecimentos_saude as est 
+on id_cnes = pf.id_estabelecimento_cnes
+where pf.id_municipio = '3509502' and
+  pf.ano IN (2018,2019,2020,2021,2022,2023) and
+  pf.cbo_2002 IN ('2231F7','223116','225130','225142') and
+  pf.indicador_atende_sus = 1 and
+  pf.carga_horaria_ambulatorial > 0 and
+  est.ano = 2015
+
+
